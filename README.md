@@ -15,11 +15,10 @@
      <img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social" alt="TWEET" />
   </a>
 </div>
-<h3 align="center">🙋‍♂️ Made by <a href="https://twitter.com/_abhijithv">@abhijithvijayan</a></h3>
+<h3 align="center">🙋‍♂️ Made by <a href="https://twitter.com/egyjs">@egyjs</a></h3>
 <p align="center">
   Donate:
-  <a href="https://www.paypal.me/iamabhijithvijayan" target='_blank'><i><b>PayPal</b></i></a>,
-  <a href="https://www.patreon.com/abhijithvijayan" target='_blank'><i><b>Patreon</b></i></a>
+  <a href="https://www.paypal.me/el3zahaby" target='_blank'><i><b>PayPal</b></i></a>,
 </p>
 <p align="center">
   <a href='https://www.buymeacoffee.com/abhijithvijayan' target='_blank'>
