@@ -28,7 +28,10 @@
   "dependencies": {
     "@babel/runtime": "^7.23.9",
     "advanced-css-reset": "^1.2.2",
+    "alpinejs": "^3.14.1",
     "caniuse-lite": "^1.0.30001662",
+    "diff2html": "^3.4.48",
+    "jszip": "^3.10.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "webext-base-css": "^1.4.4",
@@ -47,6 +50,7 @@
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-react": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
+    "@types/alpinejs": "^3.13.10",
     "@types/react": "^17.0.75",
     "@types/react-dom": "^17.0.25",
     "@types/webpack": "^5.28.5",
