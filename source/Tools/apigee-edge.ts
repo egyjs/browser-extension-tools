@@ -143,13 +143,13 @@ const openDiffUI = async (rev1: { rev: string, bundle: Blob }, rev2: { rev: stri
             background-color: #ffe6e6;
           }
           .f-added {
-            color: green;
+            color: #00b100;
           }
           .f-removed {
             color: red;
           }
           .f-modified {
-            color: blue;
+            color: #003e00;
           }
           li.active {
             background-color: #eee     
@@ -236,7 +236,7 @@ const openDiffUI = async (rev1: { rev: string, bundle: Blob }, rev2: { rev: stri
               };
               fileList.appendChild(li);
             });
-          })(${JSON.stringify([...new Uint8Array(blob1ArrayBuffer)])}, ${JSON.stringify([...new Uint8Array(blob2ArrayBuffer)])});
+      })(${JSON.stringify(Array.from(new Uint8Array(blob1ArrayBuffer)))}, ${JSON.stringify(Array.from(new Uint8Array(blob2ArrayBuffer)))});
         </script>
       </body>
       </html>
