@@ -109,7 +109,6 @@ const openDiffUI = async (rev1: { rev: string, bundle: Blob }, rev2: { rev: stri
         <title>Diff Viewer</title>
         <style>
           body {
-            display: flex;
             font-family: Arial, sans-serif;
           }
           .navigation {
@@ -117,15 +116,14 @@ const openDiffUI = async (rev1: { rev: string, bundle: Blob }, rev2: { rev: stri
             border-right: 1px solid #ccc;
             padding: 10px;
             box-sizing: border-box;
+            float: left;
           }
           .diff-viewer {
-            width: 70%;
-            padding: 10px;
-            box-sizing: border-box;
-            white-space: pre-wrap;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-          }
+                width: 70%;
+                padding: 10px;
+                box-sizing: border-box;
+                float: left;
+        }
           ul {
             list-style-type: none;
             padding: 0;
@@ -160,6 +158,13 @@ const openDiffUI = async (rev1: { rev: string, bundle: Blob }, rev2: { rev: stri
         </style>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jsdiff/7.0.0/diff.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/styles/github.min.css" />
+    <link
+      rel="stylesheet" 
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css"
+    />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
       </head>
       <body>
         <div class="navigation">
@@ -168,12 +173,12 @@ const openDiffUI = async (rev1: { rev: string, bundle: Blob }, rev2: { rev: stri
         </div>
         <div class="diff-viewer" id="diff-viewer">
           <h3>Diff</h3>
-          <pre id="diff-content"></pre>
+          <div id="diff-el"></div>
         </div>
         <script>
           (async function(blob1ArrayBuffer, blob2ArrayBuffer) {
             const fileList = document.getElementById('file-list');
-            const diffContent = document.getElementById('diff-content');
+            const diffContent = document.getElementById('diff-el');
             
             // Load and extract files from the zip blobs
             const zip1 = await JSZip.loadAsync(blob1ArrayBuffer);
@@ -223,19 +228,35 @@ const openDiffUI = async (rev1: { rev: string, bundle: Blob }, rev2: { rev: stri
                 li.classList.add('active');
                 const file1Content = await zip1.files[fileName].async('string');
                 const file2Content = await zip2.files[fileName]?.async('string') || '';
-                const diff = Diff.diffLines(file2Content, file1Content);
+                const diff = Diff.createTwoFilesPatch(fileName,fileName,file2Content, file1Content);
                 
-                diffContent.innerHTML = '';
-                diff.forEach(part => {
-                  const span = document.createElement('span');
-                  span.textContent = part.value;
-                  if (part.added) {
-                    span.className = 'added';
-                  } else if (part.removed) {
-                    span.className = 'removed';
-                  }
-                  diffContent.appendChild(span);
-                });
+                
+                var configuration = {
+                    drawFileList: true,
+                    fileListToggle: false,
+                    fileListStartVisible: false,
+                    fileContentToggle: false,
+                    matching: 'lines',
+                    outputFormat: 'side-by-side',
+                    synchronisedScroll: true,
+                    highlight: true,
+                    renderNothingWhenEmpty: false,
+                 };
+              var diff2htmlUi = new Diff2HtmlUI(diffContent, diff, configuration);
+              diff2htmlUi.draw();
+              diff2htmlUi.highlightCode();
+
+                // diffContent.innerHTML = '';
+                // diff.forEach(part => {
+                //   const span = document.createElement('span');
+                //   span.textContent = part.value;
+                //   if (part.added) {
+                //     span.className = 'added';
+                //   } else if (part.removed) {
+                //     span.className = 'removed';
+                //   }
+                //   diffContent.appendChild(span);
+                // });
               };
               fileList.appendChild(li);
             });
