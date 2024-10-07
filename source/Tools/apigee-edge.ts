@@ -1,9 +1,9 @@
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-const getProxyRevisions = async (proxy: string): Promise<string[]> => {
+const getProxyRevisions = async (org:string,proxy: string): Promise<string[]> => {
     const { origin } = window.location;
-    const url = `${origin}/ws/proxy/organizations/devft/apis/${proxy}?includeRevisions=true`;
+    const url = `${origin}/ws/proxy/organizations/${org}/apis/${proxy}?includeRevisions=true`;
     console.log("Fetching proxy revisions from URL:", url);
     const response = await fetch(url, {
         method: 'GET',
@@ -16,9 +16,9 @@ const getProxyRevisions = async (proxy: string): Promise<string[]> => {
     return data.revision;
 };
 
-const downloadRevisionBundle = async (proxy: string, revision: string): Promise<Blob> => {
+const downloadRevisionBundle = async (org:string,proxy: string, revision: string): Promise<Blob> => {
     const { origin } = window.location;
-    const url = `${origin}/gw/download/devft/${proxy}/${revision}/`;
+    const url = `${origin}/gw/download/${org}/${proxy}/${revision}/`;
     console.log("Downloading revision bundle from URL:", url);
     const response = await fetch(url);
     console.log("Downloaded revision bundle for revision:", revision);
@@ -57,12 +57,14 @@ const diff = async () => {
     const pathParts = window.location.pathname.split('/');
     const proxy = pathParts[4];
     let currentRev = pathParts[6];
+    const org = pathParts[2];
+    console.log("Current revision:", currentRev, "for proxy:", proxy, "in org:", org);
 
     console.log("Starting diff process for proxy:", proxy, "and current revision:", currentRev);
-    const revisions = await getProxyRevisions(proxy).then(revs => revs.filter(rev => rev !== currentRev));
+    const revisions = await getProxyRevisions(org,proxy).then(revs => revs.filter(rev => rev !== currentRev));
     console.log("Revisions fetched:", revisions);
 
-    let currentRevBundle = await downloadRevisionBundle(proxy, currentRev);
+    let currentRevBundle = await downloadRevisionBundle(org,proxy, currentRev);
     console.log("Current revision bundle downloaded:", currentRevBundle);
 
 
@@ -78,7 +80,7 @@ const diff = async () => {
         if (target.tagName === 'A' && target.dataset.rev) {
             const selectedRev = target.dataset.rev;
             console.log("Selected revision for diff:", selectedRev);
-            const selectedRevBundle = await downloadRevisionBundle(proxy, selectedRev);
+            const selectedRevBundle = await downloadRevisionBundle(org,proxy, selectedRev);
             console.log("Selected revision bundle downloaded:", selectedRevBundle);
 
             // Open a new window with the diff UI
@@ -150,6 +152,7 @@ const openDiffUI = async (rev1: { rev: string, bundle: Blob }, rev2: { rev: stri
           }
           .f-modified {
             color: #003e00;
+            font-weight: bold;
           }
           li.active {
             background-color: #eee     
